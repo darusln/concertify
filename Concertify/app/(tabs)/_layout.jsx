@@ -36,6 +36,37 @@ const TabsLayout = () => {
             
           }}
         />
+         <Tabs.Screen
+          name="chat"
+          options={{
+            title: 'Chat',
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={require('@/assets/icons/chat.png')} 
+                color={color}
+                focused={focused}
+              />
+            ),
+            
+          }}
+        />
+          <Tabs.Screen
+          name="concerts"
+          options={{
+            title: 'Concerts',
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={require('@/assets/icons/concert.png')} 
+                color={color}
+                focused={focused}
+              />
+            ),
+            
+          }}
+        />
+         
         {/* Add more screens if needed */}
       </Tabs>
     </>
