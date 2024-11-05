@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useEffect, children } from "react"
 import { auth,db } from '../services/firebaseConfig.js';
 import {doc, setDoc, getDoc} from 'firebase/firestore'
 
-const GlobalContext = createContext();
+const GlobalContext = createContext();//for sharing user info across any component
 
 export const useGlobalContext = () => useContext
 (GlobalContext);
@@ -11,7 +11,7 @@ export const useGlobalContext = () => useContext
 const GlobalProvider = ({children}) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState(null)
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true); //shows if the authentication state is still being loaded
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
