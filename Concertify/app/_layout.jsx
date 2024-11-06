@@ -52,6 +52,8 @@ const RootLayout = () => {
           headerTintColor: '#FFFFFF' // arrow on the profile page
         }} 
       />
+       <Stack.Screen name="(screens)"
+        options={{headerShown: false}}/>
     </Stack>
   )
 }
