@@ -8,8 +8,12 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { FIREBASE_AUTH, FIRESTORE_DB} from '../../services/firebaseConfig'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword} from  'firebase/auth'
 import { setDoc, doc } from 'firebase/firestore';
+import { useGlobalContext } from '../GlobalContext'
 
 const LogIn = () => {
+
+  const { updateUser, updateAuth } = useGlobalContext();
+
   const [isSignIn, setIsSignIn] = useState(true); 
 
   const [email, setEmail] = useState('');
@@ -28,9 +32,17 @@ const LogIn = () => {
         const userCredential = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
         const user = userCredential.user;
         //router.dismissAll();
+        updateUser({
+          uid: user.uid,
+          name: name,
+          username: username,
+        });
+  
+        updateAuth({isAuth: true});
+
         router.replace('/home');
       }catch (error) {
-        console.error("Error signing in: ", error);
+        Alert.alert('Error', 'Something went wrong. Please try again.');
       }finally{
         setLoading(false)
       }
@@ -60,8 +72,22 @@ const LogIn = () => {
           spotifyTokenExpiry: '',
           createAt: new Date(),
         });
-      }catch (e){
-          console.error("Error adding document: ", e)
+
+        updateUser({
+          uid: user.uid,
+          name: name,
+          username: username,
+        });
+  
+        updateAuth({isAuth: true});
+      }catch(error){
+        if (error.code === 'auth/email-already-in-use') {
+          Alert.alert('Error', 'The email is already in use by another account');
+        } else if (error.code === 'auth/weak-password') {
+          Alert.alert('Error', 'Password should be at least 6 characters');
+        } else {
+          Alert.alert('Error', 'Failed to create an account. Please try again.');
+        }  
       }
       console.log("User created and data added to firebase")
       router.replace('/home');
