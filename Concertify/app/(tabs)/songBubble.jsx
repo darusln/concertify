@@ -245,7 +245,7 @@ const SongBubble = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <SafeAreaView style={styles.container} edges={['top']}>
-      {!state.activeConcert ? (
+      {!state.activeConcert || state.activeConcert?.id != concertId? (
         <Text style={styles.noDataText}>Concert didn't start yet!</Text>
       ) : (
        <>
