@@ -3,10 +3,12 @@ import { View, Text, StyleSheet, FlatList, SafeAreaView, ActivityIndicator } fro
 import { FIRESTORE_DB } from '../../services/firebaseConfig';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { useGlobalContext } from '../GlobalContext';
+import { useGlobalSearchParams } from 'expo-router';
 
 const Emergencies = () => {
+    
     const { state } = useGlobalContext();
-    const concertId = state.activeConcert?.id;
+    const { concertId } = useGlobalSearchParams();
 
     const [emergencies, setEmergencies] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -36,7 +38,7 @@ const Emergencies = () => {
     }, [concertId]);
 
 
-    if (!state.activeConcert) {
+    if (!state.activeConcert || state.activeConcert?.id != concertId) {
         return (
             <SafeAreaView style={styles.loadingContainer}>
                 <Text style={styles.noConcertText}>Concert didn't start. No emergencies yet!</Text>
