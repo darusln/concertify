@@ -28,6 +28,7 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { useGlobalSearchParams } from 'expo-router';
+import { useGlobalContext } from '../GlobalContext';
 
 // Spotify OAuth Config
 const CLIENT_ID = '4eb8e4c38a89447095e9dfa069ad49e6';
@@ -50,12 +51,16 @@ const SongBubble = () => {
   const userId = FIREBASE_AUTH.currentUser?.uid;
   const { concertId } = useGlobalSearchParams();
 
+  const { state } = useGlobalContext();
+
   const [accessToken, setAccessToken] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [postedSong, setPostedSong] = useState(false);
   const [fetchedSongs, setFetchedSongs] = useState([]);
   const [username, setUsername] = useState('');
+
+
 
   // auth request
   const [request, response, promptAsync] = useAuthRequest(
@@ -240,6 +245,10 @@ const SongBubble = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <SafeAreaView style={styles.container} edges={['top']}>
+      {!state.activeConcert ? (
+        <Text style={styles.noDataText}>Concert didn't start yet!</Text>
+      ) : (
+       <>
           <View style={styles.header}>
             <Text style={styles.headerTitle}>SongBubble</Text>
           </View>
@@ -300,9 +309,9 @@ const SongBubble = () => {
               </TouchableOpacity>
             )}
           />
-
-          
-        </SafeAreaView>
+        </>
+      )}
+      </SafeAreaView>
       </KeyboardAvoidingView>
     </LinearGradient>
   );
@@ -325,6 +334,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
   },
+  noDataText: {
+    color: '#aaa',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
+  },
   button: {
     backgroundColor: '#1DB954',
     padding: 20,
@@ -332,6 +347,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal:20,
+    marginBottom: 10,
   },
   buttonText: {
     color: '#fff',
@@ -346,6 +362,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
     borderRadius: 35,
     marginHorizontal: 12,
+    marginBottom: 10,
     height: 60,
   },
   buttonSearch: {

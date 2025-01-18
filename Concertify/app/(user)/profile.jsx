@@ -70,9 +70,7 @@ const Profile = () => {
       });
   
       await Promise.all(promises);
-      console.log(threads); // Log fetched threads
       setUserThreads(threads);
-      console.log("THreads:" ,threads);
     } catch (error) {
       console.error("Error fetching user threads:", error);
     }
